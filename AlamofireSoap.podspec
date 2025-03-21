@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |spec|
   spec.name  = 'AlamofireSoap'
-  spec.version  = '0.1.3'
+  spec.version  = '0.1.4'
   spec.swift_versions  = ['5.0','5.1']
   spec.summary  = 'Alamofire Extension for Soap Webservices'
 
@@ -39,5 +39,5 @@ AlamofireSoap is an extension to Alamofire Library to use Soap webservices with 
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-   spec.dependency 'Alamofire', '~> 5.0.0-rc.2'
+   spec.dependency 'Alamofire', '~> 5.10.2'
 end
