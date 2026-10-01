@@ -71,7 +71,7 @@ class SoapRequestManager {
         }
         self.soapBody = soapString
         self.soapHeader["SOAPAction"] = "\(self.namespace)/\(self.methodName)"
-        self.soapHeader["Content-Length"] = "\(soapString.count)"
+        self.soapHeader["Content-Length"] = "\(soapString.lengthOfBytes(using: .utf8))"
     }
     
     private func getStartStringWithMethod() -> String {
@@ -87,7 +87,20 @@ class SoapRequestManager {
         return startString
     }
     private func getParameterSetString(_ parameterName : String , value: String) -> String {
-        let setParamString = "<\(parameterName)>\(value)</\(parameterName)>\n"
+        let setParamString = "<\(parameterName)>\(escapeXML(value))</\(parameterName)>\n"
         return setParamString
+    }
+
+    /// Escapes characters that are not valid in XML character data. Without this a
+    /// value containing "&" or "<" produces a malformed request body, which the
+    /// server rejects before it reaches the method. The ampersand is replaced first,
+    /// otherwise the escapes below would be escaped a second time.
+    private func escapeXML(_ value: String) -> String {
+        var escaped = value.replacingOccurrences(of: "&", with: "&amp;")
+        escaped = escaped.replacingOccurrences(of: "<", with: "&lt;")
+        escaped = escaped.replacingOccurrences(of: ">", with: "&gt;")
+        escaped = escaped.replacingOccurrences(of: "\"", with: "&quot;")
+        escaped = escaped.replacingOccurrences(of: "'", with: "&apos;")
+        return escaped
     }
 }
